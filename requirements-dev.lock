@@ -12,7 +12,20 @@
 -e file:.
 antlr4-python3-runtime==4.9.3
     # via omegaconf
+numpy==2.2.2
+    # via event-episode-wyscout
+    # via pandas
 omegaconf==2.3.0
     # via event-episode-wyscout
+pandas==2.2.3
+    # via event-episode-wyscout
+python-dateutil==2.9.0.post0
+    # via pandas
+pytz==2024.2
+    # via pandas
 pyyaml==6.0.2
     # via omegaconf
+six==1.17.0
+    # via python-dateutil
+tzdata==2025.1
+    # via pandas
