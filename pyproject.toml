@@ -3,7 +3,9 @@ name = "event-episode-wyscout"
 version = "0.1.0"
 description = "Add your description here"
 authors = [{ name = "gshirato", email = "g8ta18@gmail.com" }]
-dependencies = []
+dependencies = [
+    "omegaconf>=2.3.0",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
