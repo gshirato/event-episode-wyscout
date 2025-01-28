@@ -8,3 +8,7 @@ wheels/
 
 # venv
 .venv
+
+data
+.DS_Store
+notebook
