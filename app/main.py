@@ -68,7 +68,8 @@ df["loose_end"] = df["loose_ball"] & (df["loose_ball"].shift(-1) != df["loose_ba
 df["clear_start"] = df["id"].isin(start_events)
 df["clear_end"] = df["id"].isin(end_events) | df["loose_end"]
 df["clear_start"] = (
-    df["clear_start"] | df["clear_end"].shift(1).fillna(True) | df["loose_start"]
+    df["clear_start"] | df["clear_end"].shift(1).fillna(True)
+    # | df["loose_start"]
 )
 
 
