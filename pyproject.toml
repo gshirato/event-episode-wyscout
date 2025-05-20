@@ -9,6 +9,7 @@ dependencies = [
     "pandas>=2.2.3",
     "ipykernel>=6.29.5",
     "wyscout-api @ git+ssh://git@github.com/gshirato/wyscout-api.git@main",
+    "data-container @ git+ssh://git@github.com/gshirato/data-container.git",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
