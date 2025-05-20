@@ -159,7 +159,7 @@ def get_intermediate_start(df_episode):
     df_episode = df_episode.copy()
     start = df_episode.iloc[0]
     df_episode["small.first"] = df_episode["id"] == start["id"]
-    df_episode["long_enough"] = (df_episode["small.episode.count"] > 3) & (
+    df_episode["long_enough"] = (df_episode["small.episode.count"] > 1) & (
         df_episode["small.episode.duration"] > 3
     )
 
@@ -234,4 +234,11 @@ for i, episode in enumerate(df["episode"].unique()):
     fig = draw_episode(episode_data, pitch, fig, ax)
     cols[i % 3].pyplot(fig)
     with cols[i % 3].expander("Episode {}".format(episode)):
-        st.write(show_df(episode_data))
+        st.write(
+            show_df(
+                episode_data,
+                additional_cols=[
+                    "video.duration",
+                ],
+            )
+        )
