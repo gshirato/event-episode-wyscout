@@ -11,6 +11,7 @@ dependencies = [
     "wyscout-api @ git+ssh://git@github.com/gshirato/wyscout-api.git@main",
     "data-container @ git+ssh://git@github.com/gshirato/data-container.git",
     "streamlit>=1.45.1",
+    "mplsoccer>=1.4.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
