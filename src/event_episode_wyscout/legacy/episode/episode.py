@@ -1,16 +1,12 @@
 from event_episode_wyscout.utils.episodes.data_row import get_episodes
 
-from event_episode_wyscout.datasets.playerank import PlayerRank
-
 from event_episode_wyscout.episode.base import EventEpisodes
 
 
 class EventEpisodesWithSimpleFeatures(EventEpisodes):
-    def __init__(self, events, match_info, player_info, team_info):
+    def __init__(self, events, match_info):
         self.events = events
         self.match_info = match_info
-        self.player_info = player_info
-        self.team_info = team_info
 
     def run(self):
         df = self.create_df()
@@ -92,10 +88,3 @@ class EventEpisodesWithSimpleFeatures(EventEpisodes):
                 "playerId": "player_id",
             }
         )
-
-    def assign_role(self, df, role_dict):
-        def get_role(row):
-            return role_dict.get((row["player_id"], row["match_id"]), "Unknown")
-
-        df["role_simple"] = df.apply(get_role, axis=1)
-        return df

@@ -7,5 +7,5 @@ class EventEpisodes(ABC):
         pass
 
     @abstractmethod
-    def run_and_save_df(self):
+    def run(self):
         pass

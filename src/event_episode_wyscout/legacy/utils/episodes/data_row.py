@@ -10,13 +10,18 @@ from event_episode_wyscout.utils.coordinates import (
 
 def preprocess(events):
     res = pd.json_normalize(events)
-    res["tags"] = res["tags"].apply(lambda x: [tag["id"] for tag in x])
-    res["eventSec"] = res["eventSec"].map(lambda x: round(x, 3))
+    res["eventSec"] = res["videoTimestamp"].astype(float).map(lambda x: round(x, 3))
 
-    res["start_x"] = res["positions"].apply(lambda x: x[0]["x"])
-    res["start_y"] = res["positions"].apply(lambda x: x[0]["y"])
-    res["end_x"] = res["positions"].apply(lambda x: x[1]["x"] if len(x) == 2 else None)
-    res["end_y"] = res["positions"].apply(lambda x: x[1]["y"] if len(x) == 2 else None)
+    res["start_x"] = res["location.x"]
+    res["start_y"] = res["location.y"]
+    res["end_x"] = res[["pass.endLocation.x", "carry.endLocation.x"]].apply(
+        lambda x: x[0] if x[0] is not None else x[1] if x[1] is not None else None,
+        axis=1,
+    )
+    res["end_y"] = res[["pass.endLocation.y", "carry.endLocation.y"]].apply(
+        lambda x: x[0] if x[0] is not None else x[1] if x[1] is not None else None,
+        axis=1,
+    )
 
     res = get_flags(res)
     return res
@@ -35,29 +40,13 @@ def get_flags(df):
 
 
 def accurate_flags(df):
-    def accurate(e):
-        if 1801 in e["tags"]:
-            return True
-        if 1802 in e["tags"]:
-            return False
-        return None
-
     res = df.copy()
-    res["accurate"] = res.apply(accurate, axis=1)
+    res["accurate"] = res["pass.accurate"]
     return res
 
 
 def incorrect_location_flags(df):
-    def event_with_incorrect_location(e):
-        if e["eventName"] in ["Save attempt", "Goalkeeper leaving line", "Offside"]:
-            return True
-        if e["subEventName"] in ["Goal kick", "Ground defending duel"]:
-            return True
-        return False
-
-    res = df.copy()
-    res["incorrect_location"] = res.apply(event_with_incorrect_location, axis=1)
-    return res
+    return df
 
 
 def flip_location(df, xmax, ymax):
@@ -103,9 +92,9 @@ def get_flipped(df):
 
 def get_stop_event(df, stop_events):
     res = df.copy()
-    res["obvious._.next_event"] = res["eventName"].shift(-1)
+    res["obvious._.next_event"] = res["type.primary"].shift(-1)
     non_saved = res.apply(lambda x: x["obvious._.next_event"] != "Save attempt", axis=1)
-    is_stop_events = res.apply(lambda x: x["eventName"] in stop_events, axis=1)
+    is_stop_events = res.apply(lambda x: x["type.primary"] in stop_events, axis=1)
     res["obvious.stop_event"] = is_stop_events & non_saved
 
     return res
@@ -128,7 +117,7 @@ def process_groups(df, stop_events):
         lambda x: x["matchPeriod"] != x["obvious._.prev_period"], axis=1
     )
     res["obvious.set_piece_start"] = res.apply(
-        lambda x: x["eventName"] == "Free Kick", axis=1
+        lambda x: x["type.primary"] == "Free Kick", axis=1
     )
     res["obvious.prev_stop_event"] = res["obvious.stop_event"].shift(1)
     res = get_long_pause(res, 30)
@@ -147,18 +136,17 @@ def process_groups(df, stop_events):
 def split_into_episodes(
     match_events,
     stop_events=(
-        "Shot",
-        "Foul",
-        "Interruption",
-        "Offside",
-        "Save attempt",
-        "Goalkeeper leaving line",
+        "shot",
+        "fairplay",
+        "infraction",
+        "game_interruption",
+        "offside",
+        "shot_against",
+        "goalkeeper_exit",
     ),
 ):
     res = preprocess(match_events.data)
-    res = res.groupby("matchId", as_index=False).apply(
-        process_groups, stop_events=stop_events
-    )
+    res = process_groups(res, stop_events)
     res = get_flipped(res)
     res = flip_location(res, xmax=100, ymax=100)
     res = res.groupby("matchId", as_index=False).apply(adjust_episodes)
@@ -266,7 +254,7 @@ def adjust_episodes(df):
 
 def find_first_team_in_naive_episode(group):
     filtered = group[
-        (group["eventName"] == "Pass") | (group["eventName"] == "Free Kick")
+        (group["type.primary"] == "Pass") | (group["type.primary"] == "Free Kick")
     ]
     if filtered.empty:
         return None
@@ -279,7 +267,7 @@ def find_majority_team_in_episode(group):
     whichever team has the most passes in the episode is the main team
     """
     filtered = group[
-        (group["eventName"] == "Pass") | (group["eventName"] == "Free Kick")
+        (group["type.primary"] == "Pass") | (group["type.primary"] == "Free Kick")
     ]
 
     if filtered.empty:
@@ -311,7 +299,7 @@ def change_point(current, previous, previous_duration):
 
 def get_episodes(events, match_info):
     res = []
-    events = list(sorted(events, key=lambda x: (x["matchPeriod"], x["eventSec"])))
+    events = list(sorted(events, key=lambda x: (x["videoTimestamp"])))
     events_obj = FootballEventFilter(events)
     match_episodes = split_into_episodes(events_obj)
     res.append(match_episodes)
