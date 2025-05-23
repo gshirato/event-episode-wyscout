@@ -57,8 +57,16 @@ fig = draw_episode(episode_data, pitch, fig, ax, team_colors=team_colors)
 st.sidebar.pyplot(fig)
 st.sidebar.write(episode_data)
 
+n_shown = 9
+episode_start = st.number_input(
+    "Episode Start",
+    min_value=1,
+    max_value=df["episode"].max() - n_shown,
+    value=2,
+    step=10,
+)
 
-for i, episode in enumerate(df["episode"].unique()):
+for i, episode in enumerate(range(episode_start, episode_start + n_shown)):
     if i % 3 == 0:
         cols = st.columns(3)
         st.divider()
