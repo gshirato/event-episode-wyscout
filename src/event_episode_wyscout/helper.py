@@ -1,6 +1,4 @@
 import pandas as pd
-from data_container.datasets.event.hudl.fromData import EventFromData
-from event_episode_wyscout.segment.segment import segment_events
 
 
 def get_intermediate_start(df_episode: pd.DataFrame) -> pd.Series:
@@ -40,46 +38,3 @@ def get_inter_start_ids(df: pd.DataFrame) -> pd.DataFrame:
 
     res["inter.start"] = get_intermediate_start(res)
     return res[res["inter.start"]]
-
-
-def get_df_with_episode(handler, match_id):
-    _event = handler.retrieve_event_data(match_id)["events"]
-    event = EventFromData(pd.DataFrame(_event), fps=25)
-
-    start_events, end_events, loose_ball = segment_events(_event)
-
-    res = event.get_data()
-
-    res["loose_ball"] = res["id"].isin(loose_ball)
-    res["loose_start"] = res["loose_ball"] & (
-        res["loose_ball"].shift(1) != res["loose_ball"]
-    )
-    res["loose_end"] = res["loose_ball"] & (
-        res["loose_ball"].shift(-1) != res["loose_ball"]
-    )
-
-    res["clear_start"] = res["id"].isin(start_events)
-    res["clear_end"] = res["id"].isin(end_events) | res["loose_end"]
-    res["clear_start"] = (
-        res["clear_start"] | res["clear_end"].shift(1).fillna(True)
-        # | df["loose_start"]
-    )
-
-    res["clear_episode"] = res["clear_start"].cumsum()
-
-    res["next.location.x.pct"] = res["location.x.pct"].shift(-1)
-    res["next.location.y.pct"] = res["location.y.pct"].shift(-1)
-    res["next.team.name"] = res["team.name"].shift(-1)
-
-    inter_start_ids = (
-        res.groupby("clear_episode")
-        .apply(get_inter_start_ids)
-        .set_index("id")["inter.start"]
-        .keys()
-    )
-    res["inter.start"] = res["id"].isin(inter_start_ids)
-
-    res["start"] = res["clear_start"] | res["inter.start"]
-
-    res["episode"] = res["start"].cumsum()
-    return res

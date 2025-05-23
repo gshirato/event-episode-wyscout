@@ -9,12 +9,13 @@ from wyscout_api.hudl.handler import APIHandler
 
 from mplsoccer import Pitch
 
-from event_episode_wyscout.helper import show_df, draw_episode, get_df_with_episode
+from event_episode_wyscout.helper import show_df, draw_episode
+from event_episode_wyscout.episode.split import process
 
 
 @st.cache_data
 def load_data(_handler, match_id):
-    return get_df_with_episode(
+    return process(
         handler=_handler,
         match_id=match_id,
     )
