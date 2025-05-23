@@ -3,10 +3,7 @@ from data_container.datasets.event.hudl.fromData import EventFromData
 from event_episode_wyscout.segment.segment import segment_events
 
 
-
-
-
-def get_intermediate_start(df_episode):
+def get_intermediate_start(df_episode: pd.DataFrame) -> pd.Series:
     df_episode = df_episode.copy()
     start = df_episode.iloc[0]
     df_episode["small.first"] = df_episode["id"] == start["id"]
@@ -32,7 +29,7 @@ def get_intermediate_start(df_episode):
     return inter_start
 
 
-def get_inter_start_ids(df):
+def get_inter_start_ids(df: pd.DataFrame) -> pd.DataFrame:
     res = df[df["type.secondary"].map(lambda x: "defensive_duel" not in x)]
     res["change.team"] = res["team.name"].shift(1) != res["team.name"]
     res["small.episode"] = res["change.team"].cumsum()

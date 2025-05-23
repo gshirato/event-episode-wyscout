@@ -17,7 +17,7 @@ def draw_episode(
     fig: plt.Figure,
     ax: plt.Axes,
     team_colors: dict[str, str],
-) -> pd.DataFrame:
+) -> plt.Figure:
     df = df.copy()
     start = df.iloc[0]
     start_team = start["team.name"]
