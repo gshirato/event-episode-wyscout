@@ -1,9 +1,9 @@
 import pandas as pd
 from wyscout_api import APIHandler
 from data_container.datasets.event.hudl.fromData import EventFromData
-from event_episode_wyscout.segment.segment import segment_events
+from episode_split.segment.segment import segment_events
 
-from event_episode_wyscout.helper import get_inter_start_ids
+from episode_split.helper import get_inter_start_ids
 
 
 def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:

@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from event_episode_wyscout.episode.FootballEventFilter import FootballEventFilter
-from event_episode_wyscout.utils.coordinates import (
+from episode_split.episode.FootballEventFilter import FootballEventFilter
+from episode_split.utils.coordinates import (
     get_coordinates_in_meters,
     calculate_distance,
 )

@@ -1,6 +1,6 @@
-from event_episode_wyscout.utils.episodes.data_row import get_episodes
+from episode_split.utils.episodes.data_row import get_episodes
 
-from event_episode_wyscout.episode.base import EventEpisodes
+from episode_split.episode.base import EventEpisodes
 
 
 class EventEpisodesWithSimpleFeatures(EventEpisodes):

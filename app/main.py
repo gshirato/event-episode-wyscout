@@ -8,9 +8,9 @@ from wyscout_api.hudl.handler import APIHandler
 
 
 from mplsoccer import Pitch
-
-from event_episode_wyscout.helper import show_df, draw_episode
-from event_episode_wyscout.episode.split import process
+from episode_split.visualization.draw import draw_episode
+from episode_split.visualization.dataframe import show_df
+from episode_split.episode.split import process
 
 
 @st.cache_data

@@ -28,4 +28,4 @@ dev-dependencies = []
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/event_episode_wyscout"]
+packages = ["src/episode_split"]
