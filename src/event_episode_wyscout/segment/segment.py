@@ -45,6 +45,3 @@ def segment_events(event: dict) -> tuple[list[tuple], list[tuple], list[tuple]]:
             loose.append(id)
 
     return start, end, loose
-
-
-def group_
