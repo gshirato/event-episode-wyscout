@@ -96,7 +96,8 @@ for i, episode in enumerate(range(episode_start, episode_start + n_shown)):
             show_df(
                 episode_data,
                 additional_cols=[
-                    "video.duration",
+                    "episode.team",
+                    "episode.duration",
                     "clear_start",
                 ],
             )
