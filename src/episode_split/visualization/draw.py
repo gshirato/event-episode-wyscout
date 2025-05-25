@@ -72,14 +72,18 @@ def draw_episode(
         )
 
     ax.set_title(
-        "Episode {} - {} - ({:02d}:{:02d} - {:02d}:{:02d})".format(
+        "Episode {} - {} - ({:02d}:{:02d} - {:02d}:{:02d}: {:02d} secs)\n".format(
             start["episode"],
             start["team.name"],
             int(start["minute"]),
             int(start["second"]),
             int(end["minute"]),
             int(end["second"]),
-        ),
+            int(start["episode.duration"]),
+        )
+        + f"{'Transition, ' if start['episode.is.transition'] else ''}"
+        + f"{'from loose ball, ' if start['episode.is.from_loose_ball'] else ''}"
+        + f"{'To loose ball, ' if start['episode.is.to_loose_ball'] else ''}",
         fontsize=16,
     )
     return fig
