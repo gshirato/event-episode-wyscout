@@ -62,4 +62,5 @@ def process(
 ) -> pd.DataFrame:
     df = get_df_with_episode(handler, match_id)
     df = add_episode_info(df)
+    df["is.loss"] = df["type.secondary"].map(lambda x: "loss" in x)
     return df
