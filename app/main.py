@@ -11,7 +11,6 @@ from mplsoccer import Pitch
 from episode_split.visualization.draw import draw_episode
 from episode_split.visualization.dataframe import show_df
 from episode_split.episode.split import process
-from episode_split.episode.characterize import add_episode_info
 
 
 @st.cache_data

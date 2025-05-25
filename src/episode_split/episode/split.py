@@ -4,6 +4,7 @@ from data_container.datasets.event.hudl.fromData import EventFromData
 from episode_split.segment.segment import segment_events
 
 from episode_split.helper import get_inter_start_ids
+from episode_split.episode.characterize import add_episode_info
 
 
 def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
@@ -55,14 +56,10 @@ def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     return res
 
 
-def add_episode_info(df: pd.DataFrame) -> pd.DataFrame:
-    res = df.copy()
-    return res
-
-
 def process(
     handler: APIHandler,
     match_id: int,
 ) -> pd.DataFrame:
     df = get_df_with_episode(handler, match_id)
+    df = add_episode_info(df)
     return df
