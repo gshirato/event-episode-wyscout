@@ -1,7 +1,7 @@
 import pandas as pd
 from wyscout_api import APIHandler
 from data_container.datasets.event.hudl.fromData import EventFromData
-from episode_split.segment.segment import segment_events_with_gk_exit
+from episode_split.segment.segment import segment_events
 
 from episode_split.helper import get_inter_start_ids
 
@@ -10,9 +10,7 @@ def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     _event = handler.retrieve_event_data(match_id)["events"]
     event = EventFromData(pd.DataFrame(_event), fps=25)
 
-    start_events, end_events, loose_ball, gk_exit_splits = segment_events_with_gk_exit(
-        _event
-    )
+    start_events, end_events, loose_ball, gk_exit_splits = segment_events(_event)
 
     res = event.get_data()
 

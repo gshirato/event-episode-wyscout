@@ -24,30 +24,7 @@ def loose_ball(secondary: str) -> bool:
     return False
 
 
-def segment_events(event: dict) -> tuple[list[tuple], list[tuple], list[tuple]]:
-    start = []
-    end = []
-    loose = []
-
-    for i, ev in enumerate(event):
-        id = ev["id"]
-        team = ev["team"]["id"]
-        primary = ev["type"]["primary"]
-        secondary = ev["type"]["secondary"]
-        videoTimestamp = ev["videoTimestamp"]
-        period = ev["matchPeriod"]
-
-        if clear_start(primary, secondary):
-            start.append(id)
-        if clear_end(primary, secondary):
-            end.append(id)
-        if loose_ball(secondary):
-            loose.append(id)
-
-    return start, end, loose
-
-
-def segment_events_with_gk_exit(event: dict) -> tuple[list, list, list, list]:
+def segment_events(event: dict) -> tuple[list, list, list, list]:
     """
     イベントをセグメントに分割し、goalkeeper_exitの処理を追加
 
