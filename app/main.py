@@ -226,3 +226,9 @@ for i, episode in enumerate(range(episode_start, episode_start + n_shown)):
                 ],
             )
         )
+    if cols[i % 3].button(
+        "Copy dataframe to clipboard",
+        key=f"copy_{episode}",
+    ):
+        episode_data.to_clipboard(index=False)
+        cols[i % 3].success("DataFrame copied to clipboard!")
