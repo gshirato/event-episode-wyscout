@@ -117,5 +117,4 @@ def add_episode_info(df: pd.DataFrame) -> pd.DataFrame:
     episode_duration_dict = res.groupby("episode").apply(get_episode_duration).to_dict()
     res["episode.duration"] = res["episode"].map(episode_duration_dict)
 
-    st.write(res)
     return res
