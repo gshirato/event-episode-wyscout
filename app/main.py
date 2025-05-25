@@ -35,8 +35,6 @@ handler = APIHandler(os.environ["WYSCOUT_ID"], os.environ["WYSCOUT_PW"], logger)
 cols = st.columns(2)
 
 df = load_data(handler, match_id=5670574)
-
-df = add_episode_info(df)
 df = df[df["type.primary"] != "game_interruption"]
 
 with st.expander("Show DataFrame"):
