@@ -38,7 +38,7 @@ df = load_data(handler, match_id=5670574)
 df = df[df["type.primary"] != "game_interruption"]
 
 with st.expander("Show DataFrame"):
-    st.write(df["clear_episode"].max() + 1)
+    st.write("\# Episodes: ", df["episode"].max() + 1)
     st.write(
         df[
             [
