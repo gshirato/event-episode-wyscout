@@ -8,12 +8,13 @@ from episode_split.episode.characterize import add_episode_info
 
 
 def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
-    _event = handler.retrieve_event_data(match_id)["events"]
+    _event = handler.retrieve_event_data(match_id)
     if _event is None:
         handler.logger.warning(
             f"No events found for match_id {match_id}. Returning empty DataFrame."
         )
         return pd.DataFrame()
+    _event = _event["events"]
     event = EventFromData(pd.DataFrame(_event), fps=25)
 
     start_events, end_events, loose_ball, gk_exit_splits = segment_events(_event)
