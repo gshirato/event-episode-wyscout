@@ -1,2 +1,1 @@
-def hello() -> str:
-    return "Hello from event-episode-wyscout!"
+from .episode.split import process as create_df_with_episodes
