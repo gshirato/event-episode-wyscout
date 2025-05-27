@@ -1,6 +1,6 @@
 from importlib.metadata import version
 
-__version__ = version("event-episode-split")
+__version__ = version("episode_split")
 
 from .episode.split import process
 
