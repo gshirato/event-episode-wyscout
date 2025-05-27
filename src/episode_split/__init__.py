@@ -1,1 +1,7 @@
-from .episode.split import process as create_df_with_episodes
+from importlib.metadata import version
+
+__version__ = version("event-episode-split")
+
+from .episode.split import process
+
+__all__ = [process]
