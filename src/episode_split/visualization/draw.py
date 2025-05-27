@@ -83,7 +83,8 @@ def draw_episode(
         )
         + f"{'Transition, ' if start['episode.is.transition'] else ''}"
         + f"{'from loose ball, ' if start['episode.is.from_loose_ball'] else ''}"
-        + f"{'To loose ball, ' if start['episode.is.to_loose_ball'] else ''}",
+        + f"{'To loose ball, ' if start['episode.is.to_loose_ball'] else ''}"
+        + f"{start['type.primary']} - {end['type.primary']}",
         fontsize=16,
     )
     return fig
