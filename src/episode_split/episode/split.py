@@ -9,6 +9,11 @@ from episode_split.episode.characterize import add_episode_info
 
 def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     _event = handler.retrieve_event_data(match_id)["events"]
+    if _event is None:
+        handler.logger.warning(
+            f"No events found for match_id {match_id}. Returning empty DataFrame."
+        )
+        return pd.DataFrame()
     event = EventFromData(pd.DataFrame(_event), fps=25)
 
     start_events, end_events, loose_ball, gk_exit_splits = segment_events(_event)
@@ -61,6 +66,8 @@ def process(
     match_id: int,
 ) -> pd.DataFrame:
     df = get_df_with_episode(handler, match_id)
+    if df.empty:
+        return df
     df = add_episode_info(df)
     df["is.loss"] = df["type.secondary"].map(lambda x: "loss" in x)
     return df
