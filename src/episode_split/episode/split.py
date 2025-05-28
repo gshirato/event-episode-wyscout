@@ -33,7 +33,7 @@ def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     res["clear_end"] = res["id"].isin(end_events)
     res["clear_start"] = res["clear_start"] | res["clear_end"].shift(1).fillna(
         True
-    ).infer_objects(copy=False)
+    ).astype(bool)
 
     res["clear_episode"] = res["clear_start"].cumsum()
 
@@ -49,12 +49,8 @@ def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     )
     res["inter.start"] = res["id"].isin(inter_start_ids)
 
-    res["before_loose_end"] = (
-        res["loose_end"].shift(-1).fillna(False).infer_objects(copy=False)
-    )
-    res["after_loose_end"] = (
-        res["loose_end"].shift(1).fillna(False).infer_objects(copy=False)
-    )
+    res["before_loose_end"] = res["loose_end"].shift(-1).fillna(False).astype(bool)
+    res["after_loose_end"] = res["loose_end"].shift(1).fillna(False).astype(bool)
     res["gk_exit_split"] = res["id"].isin(gk_exit_splits)
 
     res["start"] = (
