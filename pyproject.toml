@@ -1,6 +1,6 @@
 [project]
 name = "event-episode-wyscout"
-version = "0.1.0"
+version = "0.2.0"
 description = "Add your description here"
 authors = [{ name = "gshirato", email = "g8ta18@gmail.com" }]
 dependencies = [
