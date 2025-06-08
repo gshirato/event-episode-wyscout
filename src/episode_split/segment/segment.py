@@ -15,6 +15,8 @@ def clear_end(primary: str, secondary: str) -> bool:
         return True
     if "ball_out" in secondary:
         return True
+    if "conceded_goal" in secondary:
+        return True
     return False
 
 
