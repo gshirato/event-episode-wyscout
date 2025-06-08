@@ -33,7 +33,7 @@ handler = APIHandler(os.environ["WYSCOUT_ID"], os.environ["WYSCOUT_PW"], logger)
 
 st.sidebar.selectbox(
     "Select Match",
-    [5670612, 5670574, 5552011],
+    [5670612, 5670574, 5552011, 5670599, 5670632],
     index=0,
     key="match_id",
 )
