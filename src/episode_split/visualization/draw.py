@@ -45,7 +45,7 @@ def draw_episode(
         df["location.y.pct"],
         ax=ax,
         facecolor="none",
-        edgecolor=df["team.name"].map(team_colors),
+        edgecolor=df["team.name"].map(lambda x: team_colors.get(x, "black")),
         s=100,
         lw=1,
     )
@@ -56,7 +56,7 @@ def draw_episode(
         df["next.location.x.pct"],
         df["next.location.y.pct"],
         ax=ax,
-        color=df["team.name"].map(team_colors),
+        color=df["team.name"].map(lambda x: team_colors.get(x, "black")),
         width=2,
     )
 

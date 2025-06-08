@@ -31,10 +31,17 @@ root_dir = Path(".").resolve()
 logger = setup_logger("streamlit", root_dir / "log/streamlit.log")
 handler = APIHandler(os.environ["WYSCOUT_ID"], os.environ["WYSCOUT_PW"], logger)
 
+st.sidebar.selectbox(
+    "Select Match",
+    [5670612, 5670574, 5552011],
+    index=0,
+    key="match_id",
+)
 
 cols = st.columns(2)
 
-df = load_data(handler, match_id=5670574)
+
+df = load_data(handler, match_id=st.session_state["match_id"])
 df = df[df["type.primary"] != "game_interruption"]
 
 with st.expander("Show DataFrame"):
@@ -64,7 +71,12 @@ st.sidebar.selectbox(
 
 episode_data = df[df["episode"] == st.session_state["episode_select"]].copy()
 
-team_colors = {"Urawa Reds": "#FF0000", "Tokyo": "#0000FF"}
+team_colors = {
+    "Urawa Reds": "#FF0000",
+    "Tokyo": "#0000FF",
+    "Consadole Sapporo": "#FF8000",
+    "Kashiwa Reysol": "#0000ff",
+}
 fig = draw_episode(episode_data, pitch, fig, ax, team_colors=team_colors)
 
 st.sidebar.pyplot(fig)

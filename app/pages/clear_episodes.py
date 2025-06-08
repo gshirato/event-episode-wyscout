@@ -31,10 +31,16 @@ root_dir = Path(".").resolve()
 logger = setup_logger("streamlit", root_dir / "log/streamlit.log")
 handler = APIHandler(os.environ["WYSCOUT_ID"], os.environ["WYSCOUT_PW"], logger)
 
+st.sidebar.selectbox(
+    "Select Match",
+    [5670612, 5670574, 5552011],
+    index=0,
+    key="match_id",
+)
 
 cols = st.columns(2)
 
-df = load_data(handler, match_id=5670574)
+df = load_data(handler, match_id=st.session_state["match_id"])
 
 
 with st.expander("Show DataFrame"):
