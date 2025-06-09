@@ -38,3 +38,63 @@ def get_inter_start_ids(df: pd.DataFrame) -> pd.DataFrame:
 
     res["inter.start"] = get_intermediate_start(res)
     return res[res["inter.start"]]
+
+
+def is_score_in_df(df):
+    attack_team = df["team.name"].values[0]
+    shots = df[df["type.primary"] == "shot"]
+    if shots.empty:
+        return False
+
+    if shots.iloc[-1]["team.name"] != attack_team:
+        return False
+    if df["possession.attack.withGoal"].values.any():
+        return True
+    if df["type.secondary"].map(lambda x: "goal_conceded" in x).any():
+        return True
+    return False
+
+
+def is_shot_in_df(df):
+    attack_team = df["team.name"].values[0]
+    shots = df[df["type.primary"] == "shot"]
+    if shots.empty:
+        return False
+
+    if shots.iloc[-1]["team.name"] != attack_team:
+        return False
+    if df["possession.attack.withShot"].values.any():
+        return True
+    if df["type.secondary"].map(lambda x: "goal_conceded" in x).any():
+        return True
+    return False
+
+
+def is_shot_in_df_against(df):
+    attack_team = df["team.name"].values[0]
+    shots = df[df["type.primary"] == "shot"]
+    if shots.empty:
+        return False
+
+    if shots.iloc[-1]["team.name"] == attack_team:
+        return False
+    if df["possession.attack.withShot"].values.any():
+        return True
+    if df["type.secondary"].map(lambda x: "goal_conceded" in x).any():
+        return True
+    return False
+
+
+def is_goal_against_in_df(df):
+    attack_team = df["team.name"].values[0]
+    shots = df[df["type.primary"] == "shot"]
+    if shots.empty:
+        return False
+
+    if shots.iloc[-1]["team.name"] == attack_team:
+        return False
+    if df["possession.attack.withGoal"].values.any():
+        return True
+    if df["type.secondary"].map(lambda x: "goal_conceded" in x).any():
+        return True
+    return False

@@ -1,4 +1,10 @@
 import pandas as pd
+from episode_split.helper import (
+    is_score_in_df,
+    is_shot_in_df,
+    is_goal_against_in_df,
+    is_shot_in_df_against,
+)
 
 
 def get_team_percentages(df: pd.DataFrame) -> list:
@@ -116,5 +122,37 @@ def add_episode_info(df: pd.DataFrame) -> pd.DataFrame:
 
     episode_duration_dict = res.groupby("episode").apply(get_episode_duration).to_dict()
     res["episode.duration"] = res["episode"].map(episode_duration_dict)
+
+    episode_to_score = res.groupby("clear_episode").apply(is_score_in_df).to_dict()
+    episode_to_shot = res.groupby("clear_episode").apply(is_shot_in_df).to_dict()
+    episode_to_shot_against = (
+        res.groupby("clear_episode").apply(is_shot_in_df_against).to_dict()
+    )
+    episode_to_goal_against = (
+        res.groupby("clear_episode").apply(is_goal_against_in_df).to_dict()
+    )
+
+    res["clear_episode.is_score"] = res["clear_episode"].map(episode_to_score)
+    res["clear_episode.is_shot"] = res["clear_episode"].map(episode_to_shot)
+    res["clear_episode.is_shot_against"] = res["clear_episode"].map(
+        episode_to_shot_against
+    )
+    res["clear_episode.is_goal_against"] = res["clear_episode"].map(
+        episode_to_goal_against
+    )
+
+    episode_to_score = res.groupby("episode").apply(is_score_in_df).to_dict()
+    episode_to_shot = res.groupby("episode").apply(is_shot_in_df).to_dict()
+    episode_to_shot_against = (
+        res.groupby("episode").apply(is_shot_in_df_against).to_dict()
+    )
+    episode_to_goal_against = (
+        res.groupby("episode").apply(is_goal_against_in_df).to_dict()
+    )
+
+    res["episode.is_score"] = res["episode"].map(episode_to_score)
+    res["episode.is_shot"] = res["episode"].map(episode_to_shot)
+    res["episode.is_shot_against"] = res["episode"].map(episode_to_shot_against)
+    res["episode.is_goal_against"] = res["episode"].map(episode_to_goal_against)
 
     return res
