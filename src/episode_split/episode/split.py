@@ -62,7 +62,7 @@ def get_df_with_episode(handler: APIHandler, match_id: int) -> pd.DataFrame:
     return res
 
 
-def add_successful_column(df: pd.DataFrame) -> pd.DataFrame:
+def get_successful_column(df: pd.DataFrame) -> pd.Series:
     """
     either one of the following columns is True:
     - pass.accurate
@@ -77,7 +77,7 @@ def add_successful_column(df: pd.DataFrame) -> pd.DataFrame:
     - is.loss
     """
 
-    df["is.success"] = (
+    return (
         df["pass.accurate"].fillna(False)
         | df["shot.onTarget"].fillna(False)
         | df["groundDuel.keptPossession"].fillna(False)
@@ -86,8 +86,6 @@ def add_successful_column(df: pd.DataFrame) -> pd.DataFrame:
         | df["groundDuel.recoveredPossession"].fillna(False)
         | df["aerialDuel.firstTouch"].fillna(False)
     ) & ~df["is.loss"].fillna(False)
-
-    return df
 
 
 def process(
@@ -99,5 +97,6 @@ def process(
         return df
     df = add_episode_info(df)
     df["is.loss"] = df["type.secondary"].map(lambda x: "loss" in x)
+    df["successful"] = get_successful_column(df)
 
     return df
