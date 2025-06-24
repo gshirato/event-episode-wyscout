@@ -29,6 +29,9 @@ def get_intermediate_start(df_episode: pd.DataFrame) -> pd.Series:
 
 def get_inter_start_ids(df: pd.DataFrame) -> pd.DataFrame:
     res = df[df["type.secondary"].map(lambda x: "defensive_duel" not in x)]
+    if res.empty:
+        return pd.DataFrame(columns=["id", "inter.start"])
+
     res["change.team"] = res["team.name"].shift(1) != res["team.name"]
     res["small.episode"] = res["change.team"].cumsum()
     duration = res.groupby("small.episode")["video.duration"].sum().to_dict()
